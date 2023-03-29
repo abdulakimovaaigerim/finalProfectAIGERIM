@@ -40,6 +40,7 @@ public class User implements UserDetails {
 
     private Role role;
 
+
     private int expiration;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.EAGER)

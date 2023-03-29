@@ -42,11 +42,11 @@ public class MenuItem {
     @JsonIgnore
     private StopList stopList;
 
-    @ManyToMany(mappedBy = "menuItems", cascade = ALL, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "menuItems", cascade = {PERSIST,REFRESH,DETACH,MERGE}, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Cheque> cheques = new ArrayList<>();
 
-    @ManyToOne(cascade = ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {PERSIST,REFRESH,DETACH,MERGE}, fetch = FetchType.LAZY)
     @JsonIgnore
     private SubCategory subCategory;
 

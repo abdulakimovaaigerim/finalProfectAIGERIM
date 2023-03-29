@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FinalProfectAigerimApplication {
+public class FinalProjectAigerimApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FinalProfectAigerimApplication.class, args);
+        SpringApplication.run(FinalProjectAigerimApplication.class, args);
     }
 
 }

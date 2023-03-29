@@ -14,6 +14,7 @@ import peaksoft.config.jwt.JwtUtil;
 import peaksoft.dto.request.AuthRequest;
 import peaksoft.dto.request.UserRequest;
 import peaksoft.dto.request.UserTokenRequest;
+import peaksoft.dto.request.UserUpdateRequest;
 import peaksoft.dto.response.PaginationResponseUser;
 import peaksoft.dto.response.SimpleResponse;
 import peaksoft.dto.response.UserResponse;
@@ -125,25 +126,7 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    @Override
-    public SimpleResponse saveUserByAdmin(UserRequest userRequest) {
-        Restaurant restaurant = restaurantRepository.findById(userRequest.restaurantId()).orElseThrow(()
-                -> new NoSuchElementException("Rest with id: " + userRequest.restaurantId() + " is no exist!"));
-        Boolean exists = repository.existsByEmail(userRequest.email());
-        if(!exists) {
-            User user = convert(userRequest);
-            user.setRestaurant(restaurant);
-            List<UserResponse> users = repository.getAllUsers(restaurant.getId());
-            if (users.size() <= 15) {
-                repository.save(user);
-                return SimpleResponse.builder().status(HttpStatus.OK).message("User with id: " + user.getId() + " is saved").build();
-            } else {
-                return SimpleResponse.builder().status(HttpStatus.BAD_REQUEST).message("No vacancy").build();
-            }
-        }else {
-            return SimpleResponse.builder().status(HttpStatus.CONFLICT).message("Already exist email").build();
-        }
-    }
+
 
 
     @Override
@@ -154,7 +137,6 @@ public class UserServiceImpl implements UserService {
         } else if (word.equals("accept")) {
             List<UserResponse> users = repository.getAllUsers(restaurant.getId());
             if (users.size() <= 15) {
-                assignUserToRest(id, 1L);
             } else
                 SimpleResponse.builder().status(HttpStatus.FORBIDDEN).message("No vacancy").build();
         } else if (word.equals("cancel")) {
@@ -165,20 +147,7 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    @Override
-    public SimpleResponse assignUserToRest(Long userId, Long restaurantId) {
-        User user = repository.findById(userId).orElseThrow(() ->
-                new NotFoundException("User with id: " + userId + " is no exist!"));
-        Restaurant rest = restaurantRepository.findById(restaurantId).orElseThrow(() ->
-                new NotFoundException("Restaurant with id:" + restaurantId + " is no exist"));
-        user.setRestaurant(rest);
-        rest.addUser(user);
-        repository.save(user);
-        restaurantRepository.save(rest);
-        return SimpleResponse.builder().status(HttpStatus.OK)
-                .message("User with id:" + user.getId() + " is successfully assigned!").build();
 
-    }
 
     @Override
     public UserResponse getUserById(Long id) {
@@ -192,23 +161,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public SimpleResponse updateUser(Long id, UserRequest userRequest) {
+    public SimpleResponse updateUser(Long id, UserUpdateRequest request) {
         User user = repository.findById(id).orElseThrow(() ->
                 new NotFoundException("User with id: " + id + " is no exist!"));
-        List<User> users = repository.findAll();
-        users.remove(user);
-        for (User user1 : users) {
-            if (!user1.getEmail().equals(userRequest.email())) {
-               convert(userRequest);
-                repository.save(user);
-                return SimpleResponse.builder().status(HttpStatus.OK)
-                        .message("User with id: " + id + " is successfully updated!").build();
-            } else {
-                return SimpleResponse.builder().status(HttpStatus.FORBIDDEN)
-                        .message("Email is already exists!").build();
-            }
-        }
-        return null;
+
+        user.setFirstName(request.firstName());
+        user.setLastName(request.lastName());
+        user.setDateOfBirth(request.dateOfBirth());
+        user.setEmail(request.email());
+        user.setPassword(request.password());
+        user.setPhoneNumber(request.phoneNumber());
+        user.setExpiration(request.expiration());
+        user.setRole(request.role());
+
+        repository.save(user);
+
+        return SimpleResponse.builder().status(HttpStatus.OK)
+                .message(String.format("User with id: " + id + " is successfully updated")).build();
     }
 
     @Override

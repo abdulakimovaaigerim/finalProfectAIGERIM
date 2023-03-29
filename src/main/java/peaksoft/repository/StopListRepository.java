@@ -19,10 +19,6 @@ public interface StopListRepository extends JpaRepository<StopList, Long> {
     @Query("select new peaksoft.dto.response.StopListResponse(s.menuItem.name,s.id,s.reason,s.date) from StopList s where s.id=:id")
     Optional<StopListResponse> getStopById(Long id);
 
-
-    @Modifying
-    @Query("delete from StopList s where s.id = ?1")
-    void delete(Long stopListId);
     @Override
     Page<StopList> findAll(Pageable pageable);
 }

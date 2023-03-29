@@ -101,14 +101,16 @@ public class ChequeServiceImpl implements ChequeService {
 
         Cheque cheque = chequeRepository.findById(id).orElseThrow(() ->
                 new NoSuchElementException("Cheque with id: " + id + " is not found!"));
-        List<MenuItem> menuItems = new ArrayList<>();
 
+
+        List<MenuItem> menuItems = new ArrayList<>();
         for (MenuItem menuItem : cheque.getMenuItems()) {
             for (Long aLong : chequeRequest.menuItemsId()) {
                 if (menuItem.getId().equals(aLong))
                     menuItems.add(menuItem);
             }
         }
+
         User user = userRepository.findById(id).orElseThrow(()->
                 new NoSuchElementException("User with id: " + chequeRequest.userId() + " is not found!"));
 

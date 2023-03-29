@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import peaksoft.dto.request.AuthRequest;
 import peaksoft.dto.request.UserRequest;
 import peaksoft.dto.request.UserTokenRequest;
+import peaksoft.dto.request.UserUpdateRequest;
 import peaksoft.dto.response.*;
 import peaksoft.service.UserService;
 
@@ -28,11 +29,6 @@ public class USerApi {
         return userService.authenticate(userTokenRequest);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping
-    public SimpleResponse save(@RequestBody @Valid UserRequest request) {
-        return userService.saveUserByAdmin(request);
-    }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','WAITER','CHEF')")
     @PostMapping("/save")
@@ -61,7 +57,7 @@ public class USerApi {
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @PutMapping("/{userId}")
-    public SimpleResponse update(@PathVariable Long userId, @RequestBody @Valid UserRequest userRequest) {
+    public SimpleResponse update(@PathVariable Long userId, @RequestBody @Valid UserUpdateRequest userRequest) {
         return userService.updateUser(userId, userRequest);
     }
 
@@ -75,4 +71,5 @@ public class USerApi {
         return userService.getUserPagination(page, size);
 
     }
+
 }
