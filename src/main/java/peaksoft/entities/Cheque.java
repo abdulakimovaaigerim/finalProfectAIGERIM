@@ -1,8 +1,7 @@
 package peaksoft.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -17,25 +16,30 @@ import static jakarta.persistence.CascadeType.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Cheque {
     @Id
     @GeneratedValue(generator = "cheque_id_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "cheque_id_gen", sequenceName = "cheque_id_seq", allocationSize = 1)
     private Long id;
 
-    @NotEmpty
-    @NotNull
+
     private Integer priceAverage;
 
-    @NotEmpty
-    @NotNull
     private LocalDate createAt;
 
+    private double grandTotal;
+
+
     @ManyToMany(cascade = {DETACH, MERGE, PERSIST, REFRESH}, fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<MenuItem> menuItems = new ArrayList<>();
 
     @ManyToOne(cascade = ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
     private User user;
+
+    public void addMenuItem(MenuItem menuItem) {
+        this.menuItems.add(menuItem);
+    }
 
 }

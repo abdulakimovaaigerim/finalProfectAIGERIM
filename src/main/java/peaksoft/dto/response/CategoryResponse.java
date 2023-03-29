@@ -1,2 +1,10 @@
-package peaksoft.dto.response;public record CategoryResponse() {
+package peaksoft.dto.response;
+
+import lombok.Builder;
+
+@Builder
+public record CategoryResponse(
+       Long id,
+       String name
+) {
 }

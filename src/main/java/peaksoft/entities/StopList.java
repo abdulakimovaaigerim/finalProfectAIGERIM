@@ -1,8 +1,6 @@
 package peaksoft.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,12 +21,8 @@ public class StopList {
     @SequenceGenerator(name = "stopList_id_gen", sequenceName = "stopList_id_seq", allocationSize = 1)
     private Long id;
 
-    @NotEmpty
-    @NotNull
     private String reason;
 
-    @NotEmpty
-    @NotNull
     private LocalDate date;
 
     @OneToOne(cascade = {DETACH, MERGE, PERSIST, REFRESH}, fetch = FetchType.EAGER)

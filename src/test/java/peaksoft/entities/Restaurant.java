@@ -3,9 +3,11 @@ package peaksoft.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,24 +25,20 @@ public class Restaurant {
     @SequenceGenerator(name = "restaurant_id_gen", sequenceName = "restaurant_id_seq", allocationSize = 1)
     private Long id;
 
-    @NotEmpty
-    @NotNull
+    @Length(min = 2, max = 20, message = "Name's length should be between 2 and 20!")
     private String name;
 
-    @NotEmpty
-    @NotNull
+    @NotNull(message = "Location shouldn't be null!")
     private String location;
 
-    @NotEmpty
-    @NotNull
+    @NotNull(message = "RestType shouldn't be null!")
     private String restType;
 
     @NotEmpty
     @NotNull
     private int numberOfEmployees;
 
-    @NotEmpty
-    @NotNull
+    @Positive(message = "service should be positive number!")
     private double service;
 
     @OneToMany(mappedBy = "restaurant", cascade = ALL, fetch = FetchType.LAZY)

@@ -1,28 +1,29 @@
 package peaksoft.service;
 
-import peaksoft.dto.request.UserRequest;
-import peaksoft.dto.response.AuthResponse;
+
 import peaksoft.dto.request.AuthRequest;
+import peaksoft.dto.request.UserRequest;
+import peaksoft.dto.request.UserTokenRequest;
+import peaksoft.dto.response.PaginationResponseUser;
 import peaksoft.dto.response.SimpleResponse;
 import peaksoft.dto.response.UserResponse;
+import peaksoft.dto.response.UserTokenResponse;
 
 import java.util.List;
 
 public interface UserService {
 
-    AuthResponse authenticate(AuthRequest authRequest);
+    UserTokenResponse authenticate(UserTokenRequest userTokenRequest);
+    SimpleResponse user(AuthRequest authRequest);
 
-    SimpleResponse saveUser(UserRequest userRequest);
-
-    SimpleResponse saveUserWithRes(Long id, UserRequest userRequest);
-
+    SimpleResponse saveUserByAdmin(UserRequest userRequest);
+    List<UserResponse> jobApplication(Long id, String word);
+    SimpleResponse assignUserToRest(Long userId, Long restaurantId);
     UserResponse getUserById(Long id);
-
+    List<UserResponse> getAllUsersById(Long restaurantId);
     SimpleResponse updateUser(Long id, UserRequest userRequest);
+    SimpleResponse deleteUserById(Long id);
 
-    SimpleResponse deleteById(Long id);
-
-    List<UserResponse> getAllUsers();
-
+    PaginationResponseUser getUserPagination(int page, int size);
 
 }

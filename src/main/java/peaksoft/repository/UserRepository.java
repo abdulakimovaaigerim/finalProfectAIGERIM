@@ -1,5 +1,7 @@
 package peaksoft.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -12,15 +14,17 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findByEmail(String userName);
+    Boolean existsByEmail(String email);
+    @Query("select new peaksoft.dto.response.UserResponse(l.id,concat(l.firstName,l.lastName),l.dateOfBirth,l.email,l.phoneNumber,l.expiration) from User l where l.restaurant.id=:resId")
+    List<UserResponse> getAllUsers(Long resId);
+    @Query("select new peaksoft.dto.response.UserResponse(l.id,concat(l.firstName,l.lastName),l.dateOfBirth,l.email,l.phoneNumber,l.expiration) from User l where l.id=:id")
+    Optional<UserResponse> getUserById(Long id);
+    @Query("select new peaksoft.dto.response.UserResponse(l.id,concat(l.firstName,l.lastName),l.dateOfBirth,l.email,l.phoneNumber,l.expiration) from User l where l.restaurant.id=null")
+    List<UserResponse> getAllApp();
 
-    boolean existsByEmail(String email);
+    Optional<User> findByEmail(String email);
 
-    @Query("select new peaksoft.dto.response.UserResponse(u.firstName, u.lastName, u.dateOfBirth, u.email, u.password, u.phoneNumber, u.expiration, u.role) from User u where u.id=?1")
-    UserResponse getUserById(Long id);
-
-    @Query("select new peaksoft.dto.response.UserResponse(u.firstName, u.lastName, u.dateOfBirth, u.email, u.password, u.phoneNumber, u.expiration, u.role) from User u")
-    List<UserResponse> getAllUser();
-
+    @Override
+    Page<User> findAll(Pageable pageable);
 
 }

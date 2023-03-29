@@ -1,9 +1,9 @@
 package peaksoft.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -18,17 +18,12 @@ public class SubCategory {
     @SequenceGenerator(name = "subCategory_id_gen", sequenceName = "subCategory_id_seq", allocationSize = 1)
     private Long id;
 
-    @NotEmpty
-    @NotNull
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private Category category;
 
     @OneToMany(mappedBy = "subCategory",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<MenuItem> menuItems;
 
-    public void addMenuItem(MenuItem menuItem) {
-        this.menuItems.add(menuItem);
-    }
 }

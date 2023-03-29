@@ -1,2 +1,12 @@
-package peaksoft.exceptiron;public record ExceptionResponse() {
+package peaksoft.exceptiron;
+
+import lombok.Builder;
+import org.springframework.http.HttpStatus;
+
+@Builder
+public record ExceptionResponse(
+        HttpStatus httpStatus,
+        String exceptionClassName,
+        String message
+) {
 }

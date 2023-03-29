@@ -16,11 +16,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import peaksoft.repository.UserRepository;
 
+
 @EnableWebSecurity
 @Configuration
 @EnableMethodSecurity
 public class WebAppSecurity {
-
     private final UserRepository userRepository;
 
     @Autowired
@@ -31,8 +31,7 @@ public class WebAppSecurity {
     @Bean
     public UserDetailsService userDetailsService() {
         return email -> userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException(email + "is not found"));
+                .orElseThrow(() -> new UsernameNotFoundException(email + " is not found!"));
     }
 
     @Bean
@@ -46,13 +45,13 @@ public class WebAppSecurity {
         daoAuthenticationProvider.setUserDetailsService(userDetailsService());
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
-
     }
 
-    @Bean
     @SneakyThrows
+    @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) {
         return configuration.getAuthenticationManager();
     }
+
 
 }
